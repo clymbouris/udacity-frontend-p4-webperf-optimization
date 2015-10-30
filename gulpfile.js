@@ -16,7 +16,7 @@ gulp.task('deploy', function(){
 gulp.task('optimize-index', ['pizzeria', 'img', 'html']);
 
 gulp.task('pizzeria', function(){
-	return gulp.src('./src/views/images/pizzeria.jpg')
+	return gulp.src('./source/views/images/pizzeria.jpg')
     	.pipe(imageResize({ 
       		width: 100,
       		height: 60,
@@ -29,19 +29,19 @@ gulp.task('pizzeria', function(){
 });
 
 gulp.task('img', function(){
-	return gulp.src('./src/img/**/*')
+	return gulp.src('./source/img/**/*')
     	.pipe(imagemin({ optimizationLevel: 7, progressive: true }))
     	.pipe(gulp.dest('./dist/img'));
 });
 
 gulp.task('inline', function (){
-    return gulp.src('./src/index.html')
+    return gulp.src('./source/index.html')
         .pipe(inlinesource())
-        .pipe(gulp.dest('./src'));
+        .pipe(gulp.dest('./source'));
 });
 
 gulp.task('html', ['inline'], function(){
-	return gulp.src('./src/index.html')
+	return gulp.src('./source/index.html')
     	.pipe(htmlmin({
     		collapseWhitespace: true,
     		removeComments: true,
