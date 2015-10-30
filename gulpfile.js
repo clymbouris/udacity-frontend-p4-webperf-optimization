@@ -4,6 +4,8 @@ var ghPages = require('gulp-gh-pages');
 var imageResize = require('gulp-image-resize');
 var imagemin = require('gulp-imagemin');
 
+var inlinesource = require('gulp-inline-source');
+
 gulp.task('deploy', function() {
   return gulp.src('./dist/**/*')
     .pipe(ghPages());
@@ -30,4 +32,10 @@ gulp.task('img', function(){
 	return gulp.src('./src/img/**/*')
     	.pipe(imagemin({ optimizationLevel: 7, progressive: true }))
     	.pipe(gulp.dest('./dist/img'));
+});
+
+gulp.task('inline', function () {
+    return gulp.src('./src/index.html')
+        .pipe(inlinesource())
+        .pipe(gulp.dest('./dist'));
 });
