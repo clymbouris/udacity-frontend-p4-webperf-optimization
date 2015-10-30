@@ -6,14 +6,14 @@ var inlinesource = require('gulp-inline-source');
 var htmlmin = require('gulp-htmlmin');
 
 
-gulp.task('deploy', function() {
+gulp.task('deploy', function(){
   return gulp.src('./dist/**/*')
     .pipe(ghPages());
 });
 
 // Optimization for index.html
 
-gulp.task('optimize-images', ['pizzeria', 'img']);
+gulp.task('optimize-index', ['pizzeria', 'img', 'html']);
 
 gulp.task('pizzeria', function(){
 	return gulp.src('./src/views/images/pizzeria.jpg')
@@ -34,13 +34,13 @@ gulp.task('img', function(){
     	.pipe(gulp.dest('./dist/img'));
 });
 
-gulp.task('inline', function () {
+gulp.task('inline', function (){
     return gulp.src('./src/index.html')
         .pipe(inlinesource())
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./src'));
 });
 
-gulp.task('html', function(){
+gulp.task('html', ['inline'], function(){
 	return gulp.src('./src/index.html')
     	.pipe(htmlmin({
     		collapseWhitespace: true,
