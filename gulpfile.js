@@ -13,9 +13,10 @@ gulp.task('deploy', function(){
 
 // Optimization for index.html
 
-gulp.task('optimize-index', ['pizzeria', 'img', 'html']);
+// Usage: Delete everythingi in ./dist and run 'gulp optimize-index'
+gulp.task('optimize-index', ['index-pizzeria', 'index-images', 'index-html']);
 
-gulp.task('pizzeria', function(){
+gulp.task('index-pizzeria', function(){
 	return gulp.src('./source/views/images/pizzeria.jpg')
     	.pipe(imageResize({ 
       		width: 100,
@@ -28,19 +29,19 @@ gulp.task('pizzeria', function(){
     	.pipe(gulp.dest('./dist/views/images'));
 });
 
-gulp.task('img', function(){
+gulp.task('index-images', function(){
 	return gulp.src('./source/img/**/*')
     	.pipe(imagemin({ optimizationLevel: 7, progressive: true }))
     	.pipe(gulp.dest('./dist/img'));
 });
 
-gulp.task('inline', function (){
+gulp.task('index-inline', function (){
     return gulp.src('./source/index.html')
         .pipe(inlinesource())
         .pipe(gulp.dest('./source'));
 });
 
-gulp.task('html', ['inline'], function(){
+gulp.task('index-html', ['index-inline'], function(){
 	return gulp.src('./source/index.html')
     	.pipe(htmlmin({
     		collapseWhitespace: true,
