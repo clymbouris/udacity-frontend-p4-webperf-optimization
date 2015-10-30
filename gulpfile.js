@@ -1,10 +1,10 @@
 var gulp = require('gulp');
 var ghPages = require('gulp-gh-pages');
-
 var imageResize = require('gulp-image-resize');
 var imagemin = require('gulp-imagemin');
-
 var inlinesource = require('gulp-inline-source');
+var htmlmin = require('gulp-htmlmin');
+
 
 gulp.task('deploy', function() {
   return gulp.src('./dist/**/*')
@@ -38,4 +38,15 @@ gulp.task('inline', function () {
     return gulp.src('./src/index.html')
         .pipe(inlinesource())
         .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('html', function(){
+	return gulp.src('./src/index.html')
+    	.pipe(htmlmin({
+    		collapseWhitespace: true,
+    		removeComments: true,
+    		minifyJS: true,
+    		minifyCSS: true
+    	}))
+    	.pipe(gulp.dest('dist'))
 });
