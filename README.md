@@ -14,6 +14,7 @@ Portfolio Optimizations:
 
 Pizzeria Optimizations:
 
-1. Replace querySelectAll with more specific selectors like getElemetById and getElementByClassName (https://github.com/jquery/standards/issues/4)
-2. Cache/calculate randomPizzaContainer, dx, newwidth, pizzasDiv and items outside of loops.
+1. Replace querySelectAll with more specific selectors like getElemetById and getElementByClassName. (https://github.com/jquery/standards/issues/4)
+2. Cache/calculate randomPizzaContainer, dx, newwidth, pizzasDiv, items and part of phase outside of loops.
 3. Render just 20 pizzas on screen instead of 200 (only 20 are visible at any time).
+4. Calculate loop lengths only once (minor improvement).
