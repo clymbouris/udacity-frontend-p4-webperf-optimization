@@ -403,8 +403,12 @@ var resizePizzas = function(size) {
 
   function determineDx (elem, size) {
     var oldwidth = elem.offsetWidth;
-    // !!! Student comment !!! Replace querySelectorAll with more specific getElementById
-    var windowwidth = document.getElementById("randomPizzas").offsetWidth;
+    /* 
+    /  !!! Student comment !!! 
+    /  querySelectorAll is very slow. Get 'windowwidth' using more specific getElementById instead.
+    /  https://github.com/jquery/standards/issues/4
+    */
+    var windowwidth = document.getElementById("randomPizzas").offsetWidth;  
     var oldsize = oldwidth / windowwidth;
 
     function sizeSwitcher (size) {
@@ -429,18 +433,25 @@ var resizePizzas = function(size) {
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
     /* 
-    /  !!! Student comment !!! Query pizza containers and length only once
-    /  Replace querySelectorAll (very slow) with getElementsByClassName
+    /  !!! Student comment !!! 
+    /  'randomPizzaContainer' class calculates only once so can be cached outside loop.
+    /  Replace querySelectorAll with more specific getElementsByClassName.
     */
-    var pizzas = document.getElementsByClassName("randomPizzaContainer");
+    var randomPizzaContainer = document.getElementsByClassName("randomPizzaContainer");
     /* 
-    /  !!! Student comment: dx and newwidth are the same for each pizza so no need to iterate. Remove outside of loop and pick
-    /  first pizza elem to calculate. 
+    /  !!! Student comment !!! 
+    /  'dx' and 'newwidth' are the same for each pizza so no need to iterate. 
+    /  Cache outside loop and get first 'randomPizzaContainer' to calcuate only once.
     */
-    var dx = determineDx(pizzas[0], size);
-    var newwidth = (pizzas[0].offsetWidth + dx) + 'px';
-    for (var i = 0, pizzasLength = pizzas.length; i < pizzasLength; i++) {
-      pizzas[i].style.width = newwidth;
+    var dx = determineDx(randomPizzaContainer[0], size);
+    var newwidth = (randomPizzaContainer[0].offsetWidth + dx) + 'px';
+    /*
+    / !!! Student comment !!!
+    / Calculate length only once. 
+    / Very slight performance improvement but best practice nevertheless
+    */
+    for (var i = 0, length = randomPizzaContainer.length; i < length; i++) {
+      randomPizzaContainer[i].style.width = newwidth;
     }
   }
 
@@ -455,9 +466,12 @@ var resizePizzas = function(size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
-// !!! Student comment: pizzasDiv doesn't need to be inside the for loop as the value is constant.
+/* 
+/ !!! Student comment !!!
+/ 'pizzasDiv' needs to be calculated only once. Cache outside loop.
+*/
 var pizzasDiv = document.getElementById("randomPizzas");
-// This for-loop actually creates and appends all of the pizzas when the page loads
+
 for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
@@ -479,11 +493,14 @@ function logAverageFrame(times) {
   console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-// !!! Replace querySelectorAll (very slow) with more specific getElementsByClassName
-// Move items outside of updatePositions function so it doesn't get recalculated on every frame
+/* 
+/ !!! Student comment !!!
+/ Replace querySelectorAll to get 'items' with more specific getElementsByClassName.
+/ 'items' needs to be calculated only once so cache outside updatePositions function so 
+/ it doesn't get recalculated on every frame.
+*/
 var items = document.getElementsByClassName('mover');
 
-// Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
@@ -516,7 +533,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // !!! Student comment: Change cols from 8 to 6. 8 cols renders pizzas outside of screen width which is unnecessary.
   var cols = 6;
   var s = 256;
-  // !!! Student comment: No need to render 200 pizzas on screen. Only 20 pizzas seem to fit on screen at any time.
+  /* 
+  / !!! Student comment !!! 
+  / No need to render 200 pizzas on screen. 
+  / I can see about 20 pizzas at any time do adjusted loop.
+  */
   for (var i = 0; i < 20; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
@@ -525,7 +546,10 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    // replace querySelector with more specific getElementById
+    /*
+    / !!! Student comment !!!
+    / Replace querySelector with more specific getElementById
+    */
     document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
