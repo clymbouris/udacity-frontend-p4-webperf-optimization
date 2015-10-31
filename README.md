@@ -18,3 +18,10 @@ Pizzeria Optimizations:
 2. Cache/calculate randomPizzaContainer, dx, newwidth, pizzasDiv, items and part of phase outside of loops.
 3. Render just 20 pizzas on screen instead of 200 (only 20 are visible at any time).
 4. Calculate loop lengths only once (minor improvement).
+
+Gulp plugins used:
+1. Image Optimizations: gulp-image-resize, gulp-imagemin
+2. JavaScript Optimizations: gulp-uglify
+3. CSS optimizations: gulp-minify-css
+4. HTML optimizations: gulp-htmlmin, gulp-inline-source
+5. Other: gulp-gh-pages (to deploy just ./dist folder), gulp-rename (for renaming with suffix), gulp-jshint (to lint JS code)
