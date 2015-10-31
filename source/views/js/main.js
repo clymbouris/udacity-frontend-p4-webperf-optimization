@@ -505,18 +505,19 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  // !!! Student comment: Part of phase needs to be generated only once every frame so taking out of loop
-  var scrollPos = document.body.scrollTop / 1250;
-  // !!! Student comment: Intead of using modulo I used a separate counter since there's only 5 values
-  // Calculate length only once
-  for (var i = 0, count = 0, itemsLength = items.length; i < itemsLength; i++, count++) {
-    var phase = Math.sin(scrollPos + count);
+  /*
+  / !!! Student comment !!!
+  / Cache part of phase outside of loop so it doesn't get recalculate on each frame.
+  / Calculate length only once.
+  */
+  var scrollTop = document.body.scrollTop / 1250;
+
+  for (var i = 0, length = items.length; i < length; i++) {
+    var phase = Math.sin(scrollTop + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-    if (count === 5) count = 0;
   }
 
-  // User Timing API to the rescue again. Seriously, it's worth learning.
-  // Super easy to create custom metrics.
+  // User Timing API 
   window.performance.mark("mark_end_frame");
   window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
   if (frame % 10 === 0) {
@@ -530,13 +531,12 @@ window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  // !!! Student comment: Change cols from 8 to 6. 8 cols renders pizzas outside of screen width which is unnecessary.
-  var cols = 6;
+  var cols = 8;
   var s = 256;
   /* 
   / !!! Student comment !!! 
   / No need to render 200 pizzas on screen. 
-  / I can see about 20 pizzas at any time do adjusted loop.
+  / I can see about 20 pizzas at any time so adjusted loop.
   */
   for (var i = 0; i < 20; i++) {
     var elem = document.createElement('img');
