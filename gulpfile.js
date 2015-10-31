@@ -5,6 +5,9 @@ var imagemin = require('gulp-imagemin');
 var inlinesource = require('gulp-inline-source');
 var htmlmin = require('gulp-htmlmin');
 var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+var minifyCSS = require('gulp-minify-css');
+var jshint = require('gulp-jshint');
 
 
 gulp.task('deploy', function(){
@@ -12,9 +15,12 @@ gulp.task('deploy', function(){
     .pipe(ghPages());
 });
 
+// Usage to build ./dist from scrach. Delete ./dist and run gulp optimize
+
+gulp.task('optimize', ['optimize-index', 'optimize-pizzas']);
+
 // Optimization for index.html
 
-// Usage: Delete everything in ./dist and run 'gulp optimize-index'
 gulp.task('optimize-index', ['index-pizzeria', 'index-images', 'index-html']);
 
 gulp.task('index-pizzeria', function(){
@@ -27,7 +33,7 @@ gulp.task('index-pizzeria', function(){
       		imageMagick: true
     	}))
     	.pipe(imagemin({ optimizationLevel: 7, progressive: true }))
-      .pipe(rename({ suffix: '-100' }))
+        .pipe(rename({ suffix: '-100' }))
     	.pipe(gulp.dest('./dist/views/images'));
 });
 
@@ -57,8 +63,57 @@ gulp.task('index-html', ['index-inline'], function(){
 
 // Optimization for pizza.html
 
-gulp.task('pizzeria-images', function(){
-  return gulp.src('./source/views/images/**/*')
+// Usage: Delete everything in ./dist/views and run 'gulp optimize-pizzas'
+gulp.task('optimize-pizzas', ['pizzeria-js', 'pizzeria-html', 'pizzeria-css', 'pizzeria-images']);
+
+gulp.task('pizzeria-resize', function(){
+	return gulp.src('./source/views/images/pizzeria.jpg')
+    	.pipe(imageResize({ 
+      		width: 360,
+      		height: 270,
+      		crop: true,
+      		upscale: false,
+      		imageMagick: true
+    	}))
+    	.pipe(gulp.dest('./source/views/images'));
+});
+
+gulp.task('pizzeria-images', ['pizzeria-resize'], function(){
+  return gulp.src('./source/views/images/*')
       .pipe(imagemin({ optimizationLevel: 7, progressive: true }))
       .pipe(gulp.dest('./dist/views/images'));
 });
+
+// JavaScript minification
+// JavaScript linter
+gulp.task('jslint', function(){
+	return gulp.src('./source/views/js/**/*')
+	.pipe(jshint())
+	.pipe(jshint.reporter('jshint-stylish'))
+	.pipe(jshint.reporter('fail'));
+});
+// only run if linter has no errors
+gulp.task('pizzeria-js', ['jslint'], function(){
+	return gulp.src('./source/views/js/**/*')
+	.pipe(uglify())
+	.pipe(rename({ suffix: '.min' }))
+	.pipe(gulp.dest('./dist/views/js'));
+});
+
+// HTML minification
+gulp.task('pizzeria-html', function(){
+	return gulp.src('./source/views/pizza.html')
+    	.pipe(htmlmin({
+    		collapseWhitespace: true,
+    		removeComments: true
+    	}))
+    	.pipe(gulp.dest('dist/views'))
+});
+
+// CSS minification
+gulp.task('pizzeria-css', function(){
+	return gulp.src('./source/views/css/**/*')
+    	.pipe(rename({ suffix: '.min'}))
+    	.pipe(minifyCSS())
+    	.pipe(gulp.dest('./dist/views/css'));
+})
