@@ -1,4 +1,4 @@
-# Website Optimization Project
+# Udacity Project 4: Website Optimization
 
 <b>Usage</b>
 
@@ -29,3 +29,6 @@
 3. CSS optimizations: gulp-minify-css
 4. HTML optimizations: gulp-htmlmin, gulp-inline-source
 5. Other: gulp-gh-pages (to deploy just ./dist folder), gulp-rename (for renaming with suffix), gulp-jshint (to lint JS code)
+
+##Preview
+![PageSpeed Insights Score](http://snag.gy/ijLge.jpg)
