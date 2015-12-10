@@ -4,7 +4,7 @@ Part of the Front-End Web Developer nanodegree from Udacity. The project utilize
 
 ##Usage
 
-Generated ./dist folder is hosted @ http://d3moid.github.io/frontend-webperf/
+Generated ./dist folder is hosted @ http://d3moid.github.io/udacity-frontend-p4-webperf-optimization/
 
 ##Optimizations
 ###Portfolio page
